@@ -9,9 +9,10 @@ import json
 import importlib
 import os.path
 
-def import_fragments(*fragments):
+def pull(*fragments):
     for fragment in fragments:
         # In reality you'd get it from the package list...
         frag_path = "fragman.fragments." + fragment
-        frag_func = __import__(frag_path).gloabls()[fragment]
-        globals()[fragment] = frag_func
+        temp = __import__(frag_path, globals(), locals(), [fragment])
+        shard = temp.__dict__[fragment]
+        globals()[fragment] = shard
